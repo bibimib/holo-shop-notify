@@ -27,6 +27,20 @@ async function fetchProducts() {
   return data.products;
 }
 
+// バリアントの中に数量限定があるか確認する
+function hasLimitedVariant(product) {
+  return product.variants?.some((v) =>
+    v.title?.includes("数量限定") || v.title?.includes("限定ver")
+  ) ?? false;
+}
+
+// 数量限定バリアントのタイトルを取得する
+function getLimitedVariantTitles(product) {
+  return product.variants
+    ?.filter((v) => v.title?.includes("数量限定") || v.title?.includes("限定ver"))
+    .map((v) => v.title) ?? [];
+}
+
 // Discordに通知を送る
 async function sendDiscordNotification(product) {
   const url = `https://shop.hololivepro.com/products/${product.handle}`;
@@ -34,18 +48,33 @@ async function sendDiscordNotification(product) {
     ? `¥${Number(product.variants[0].price).toLocaleString()}`
     : "価格未定";
   const image = product.images?.[0]?.src ?? null;
+  const isLimited = hasLimitedVariant(product);
+  const limitedTitles = getLimitedVariantTitles(product);
+
+  const fields = [
+    { name: "価格", value: price, inline: true },
+    { name: "購入はこちら", value: `[ショップを開く](${url})`, inline: true },
+  ];
+
+  // 数量限定バリアントがある場合は専用フィールドを追加
+  if (isLimited) {
+    fields.push({
+      name: "⚠️ 数量限定あり",
+      value: limitedTitles.join("\n"),
+      inline: false,
+    });
+  }
 
   const payload = {
     embeds: [
       {
-        title: `🛍️ 新商品が追加されました！`,
+        title: isLimited
+          ? `🚨 数量限定あり！新商品が追加されました！`
+          : `🛍️ 新商品が追加されました！`,
         description: `**${product.title}**`,
         url,
-        color: 0xff69b4, // ホロライブピンク
-        fields: [
-          { name: "価格", value: price, inline: true },
-          { name: "購入はこちら", value: `[ショップを開く](${url})`, inline: true },
-        ],
+        color: isLimited ? 0xff0000 : 0xff69b4, // 限定は赤・通常はピンク
+        fields,
         image: image ? { url: image } : undefined,
         footer: { text: "ホロライブショップ速報" },
         timestamp: new Date().toISOString(),

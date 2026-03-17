@@ -5,6 +5,9 @@ on:
     - cron: "*/5 * * * *"  # 5分ごとに実行
   workflow_dispatch:        # 手動実行ボタンも有効
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -16,7 +19,7 @@ jobs:
       - name: Node.js セットアップ
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
 
       - name: 前回の既知IDファイルを復元
         uses: actions/cache@v4

@@ -73,7 +73,7 @@ async function sendDiscordNotification(product) {
           : `🛍️ 新商品が追加されました！`,
         description: `**${product.title}**`,
         url,
-        color: isLimited ? 0xff0000 : 0xff69b4, // 限定は赤・通常はピンク
+        color: isLimited ? 0xff0000 : 0x57f287, // 限定は赤・通常は緑
         fields,
         image: image ? { url: image } : undefined,
         footer: { text: "ホロライブショップ速報" },

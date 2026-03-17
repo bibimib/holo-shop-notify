@@ -70,7 +70,7 @@ async function sendTestNotification() {
           : `🛍️ 新商品が追加されました！`,
         description: `**${dummyProduct.title}**`,
         url,
-        color: isLimited ? 0xff0000 : 0xff69b4,
+        color: isLimited ? 0xff0000 : 0x57f287, // 限定は赤・通常は緑
         fields,
         footer: { text: "ホロライブショップ速報（これはテスト通知です）" },
         timestamp: new Date().toISOString(),

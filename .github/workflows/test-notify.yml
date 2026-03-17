@@ -4,7 +4,7 @@ on:
   workflow_dispatch: # 手動実行のみ
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 jobs:
   test:

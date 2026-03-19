@@ -41,11 +41,22 @@ function getLimitedVariantTitles(product) {
     .map((v) => v.title) ?? [];
 }
 
+// バリアント一覧から代表価格を決める（最も高い価格のバリアントを使う）
+function getRepresentativePrice(product) {
+  const variants = product.variants ?? [];
+  const prices = variants
+    .map((v) => Number(v.price))
+    .filter((p) => !isNaN(p) && p > 0);
+  if (prices.length === 0) return null;
+  return Math.max(...prices);
+}
+
 // Discordに通知を送る
 async function sendDiscordNotification(product) {
   const url = `https://shop.hololivepro.com/products/${product.handle}`;
-  const price = product.variants?.[0]?.price
-    ? `¥${Number(product.variants[0].price).toLocaleString()}`
+  const maxPrice = getRepresentativePrice(product);
+  const price = maxPrice !== null
+    ? `¥${maxPrice.toLocaleString('ja-JP')}`
     : "価格未定";
   const image = product.images?.[0]?.src ?? null;
   const isLimited = hasLimitedVariant(product);

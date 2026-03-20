@@ -1,7 +1,7 @@
 // ホロライブショップ 新商品通知スクリプト
 // 定期的に商品一覧をチェックして、新商品をDiscordに通知する
 
-const SHOP_URL = "https://shop.hololivepro.com/products.json?limit=50&page=1";
+const SHOP_URL = "https://shop.hololivepro.com/products.json?limit=50&page=1&currency=JPY";
 const KNOWN_IDS_KEY = "known_ids.json";
 const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
 const fs = require("fs");

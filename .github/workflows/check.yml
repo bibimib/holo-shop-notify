@@ -32,6 +32,7 @@ jobs:
       - name: 新商品チェック・通知
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          TIMELINE_GITHUB_TOKEN: ${{ secrets.TIMELINE_GITHUB_TOKEN }}
         run: node check.js
 
       - name: 既知IDファイルを保存
